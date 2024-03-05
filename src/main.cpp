@@ -41,10 +41,10 @@ void displayTempAndHumid() {
   sht31.readBoth(&temp, &humidity);
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print("Temp: " + String(temp));
+  lcd.print("Temp: " + String(temp) + " C");
 
   lcd.setCursor(0, 1);
-  lcd.print("Humidity: " + String(humidity));
+  lcd.print("Humidity: " + String(humidity) + "%");
 }
 
 void setup()
