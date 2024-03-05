@@ -6,6 +6,7 @@
 #include "Adafruit_SHT31.h"
 
 #define LCD_ADDRESS 0x27
+#define SHT31_ADDRESS 0x44
 
 LiquidCrystal_I2C lcd(LCD_ADDRESS, 16, 2);
 Adafruit_SHT31 sht31 = Adafruit_SHT31();
@@ -14,15 +15,16 @@ void setup()
 {
   Serial.begin(9600);
 
+  delay(2);
+
   // Delay Serial
   while (!Serial)
     delay(10);
 
-  if (!sht31.begin(0x44))
-  { // Set to 0x45 for alternate i2c addr
+  if (!sht31.begin(SHT31_ADDRESS)) {
     Serial.println("Couldn't find SHT31");
-    while (1)
-      delay(1);
+  } else {
+    Serial.println("SHT31 Found!");
   }
 
   Serial.print("Heater Enabled State: ");
@@ -40,4 +42,7 @@ void setup()
 void loop()
 {
   // put your main code here, to run repeatedly:
+  float temperature = sht31.readTemperature();
+  Serial.println("Temperature: " + String(temperature));
+  delay(10000);
 }
