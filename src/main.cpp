@@ -14,8 +14,7 @@ Adafruit_SHT31 sht31 = Adafruit_SHT31();
 int initDisplay() {
   lcd.init();
   lcd.backlight();
-  lcd.setCursor(0, 0);
-  lcd.print("Helloooo");
+  
   return 1;
 }
 
@@ -36,6 +35,18 @@ int initSHT31() {
   return 1;
 }
 
+void displayTempAndHumid() {
+  float temp, humidity;
+
+  sht31.readBoth(&temp, &humidity);
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Temp: " + String(temp));
+
+  lcd.setCursor(0, 1);
+  lcd.print("Humidity: " + String(humidity));
+}
+
 void setup()
 {
   Serial.begin(9600);
@@ -53,7 +64,6 @@ void setup()
 
 void loop()
 {
-  float temperature = sht31.readTemperature();
-  Serial.println("Temperature: " + String(temperature));
+  displayTempAndHumid();
   delay(10000);
 }
