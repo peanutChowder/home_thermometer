@@ -11,18 +11,18 @@
 LiquidCrystal_I2C lcd(LCD_ADDRESS, 16, 2);
 Adafruit_SHT31 sht31 = Adafruit_SHT31();
 
-void setup()
-{
-  Serial.begin(9600);
+int initDisplay() {
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0, 0);
+  lcd.print("Helloooo");
+  return 1;
+}
 
-  delay(2);
-
-  // Delay Serial
-  while (!Serial)
-    delay(10);
-
+int initSHT31() {
   if (!sht31.begin(SHT31_ADDRESS)) {
     Serial.println("Couldn't find SHT31");
+    return -1;
   } else {
     Serial.println("SHT31 Found!");
   }
@@ -33,15 +33,26 @@ void setup()
   else
     Serial.println("DISABLED");
 
-  lcd.init();
-  lcd.backlight();
-  lcd.setCursor(0, 0);
-  lcd.print("Helloooo");
+  return 1;
+}
+
+void setup()
+{
+  Serial.begin(9600);
+  delay(2);
+
+  while (!Serial)
+    delay(10);
+
+  initDisplay();
+  if (initSHT31() == -1) {
+    Serial.println("Could not find SHT31 - Program aborting");
+    while (1) delay(10000);
+  }
 }
 
 void loop()
 {
-  // put your main code here, to run repeatedly:
   float temperature = sht31.readTemperature();
   Serial.println("Temperature: " + String(temperature));
   delay(10000);
